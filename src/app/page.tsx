@@ -1,25 +1,38 @@
 "use client";
 import { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { DragDropContext, Droppable, Draggable,  } from "@hello-pangea/dnd";
 
 export default function Home() {
   const list = ["1 item", "2 item", "3 item", "4 item"];
+  const secondList = ["5 item", "6 item", "7 item", "8 item"];
   const [listed, setListed] = useState<any[]>(list);
+  const [otherList, setList] = useState<any[]>(secondList);
 
   function handleOnDragEnd(result: any) {
-    console.log(result)
-    const items = Array.from(listed);
-    const [reorderedItems] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItems);
-    setListed(items);
+  
+    let items = [];
+    if (result.destination.droppableId == "non") {
+      console.log(result)
+      items = Array.from(otherList);
+      console.log("eu to aqui malandro");
+      const [reorderedItems] = items.splice(result.source.index, 1);
+      items.splice(result.destination.index, 0, reorderedItems);
+      setList(items);
+    } else {
+      items = Array.from(listed);
+      console.log("CARAIO LITTLE CLEITO", result);
+      const [reorderedItems] = items.splice(result.source.index, 1);
+      items.splice(result.destination.index, 0, reorderedItems);
+      setListed(items);
+    }
   }
   return (
     <div className="w-screen h-screen flex justify-between">
       <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="test">
+        <Droppable droppableId="test" key={3}>
           {(provided) => (
             <div
-              className="w-screen h-screen flex flex-col gap-2"
+              className="w-1/2 h-screen flex flex-col gap-2"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
@@ -43,15 +56,15 @@ export default function Home() {
             </div>
           )}
         </Droppable>
-        <Droppable droppableId="non">
+        <Droppable droppableId="non" key={4}>
           {(provided) => (
             <div
               className="w-screen h-screen flex flex-col gap-2"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {listed.map((item: string, index: number) => {
-                index = -index * 10;
+              {otherList.map((item: string, index: number) => {
+                index = index;
                 return (
                   <Draggable key={index} draggableId={index + ""} index={index}>
                     {(provided) => (
