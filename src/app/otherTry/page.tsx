@@ -128,7 +128,7 @@ export default function otherTry() {
                                       ...provided.draggableProps.style,
                                     }}
                                   >
-                                    {item.content}
+                                    <div><p>{item.name}</p></div>
                                   </div>
                                 );
                               }}
